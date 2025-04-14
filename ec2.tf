@@ -1,6 +1,10 @@
 resource "aws_instance" "webserver" {
     ami = "ami-084568db4383264d4"
     instance_type = "t2.micro"
+
+     subnet_id  = aws_subnet.public_subnet.id
+  
+  associate_public_ip_address = true
     tags = {
         Name = "Webserver"
         Description = "an nginx machine"
@@ -25,6 +29,7 @@ resource "aws_key_pair" "web_key" {
 }
 
 resource "aws_security_group" "ssh-access" {
+    vpc_id  = aws_vpc.main_test_vpc.id
     name = "ssh-access"
     description = "allow ssh connection from internet"
     ingress {
