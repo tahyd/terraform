@@ -1,5 +1,29 @@
+
+
+terraform{
+    required_providers {
+
+        aws = {
+ source = "hashicorp/aws"
+         version = "~> 5.0"
+        }
+        
+    }
+
+}
+
+'
+
+
+provider "aws" {
+    region = "us-east-1"
+   
+}
+
+
+
 resource "aws_s3_bucket" "sample_bucket" {
-    bucket = "sample-demo-bucket"
+    bucket = "sample-demo-bucket-12345"
      tags = {
         Name = "sample_bucket1108679044"
         Description = "Sample bucket to store terraform state file"
@@ -9,7 +33,7 @@ resource "aws_s3_bucket" "sample_bucket" {
 resource "aws_s3_object" "sample_object" {
 
     content = "<h1> Hello World ! </h1>"
-    key = "table.tf"
+    key = "sample.txt"
     bucket = aws_s3_bucket.sample_bucket.id
 }
 
@@ -31,11 +55,9 @@ resource "aws_s3_bucket_policy" "s3-policy" {
     "Statement": [
         {
             "Effect": "Allow",
-            "Action": "*",
+            "Action": "s3:*",
             "Resource": "arn:aws:s3:::${aws_s3_bucket.sample_bucket.id}/*",
-            "Principal" : {
-            "AWS": ["*"]
-             }
+            "Principal" : "*"
         }
     ]
 }
